@@ -1,0 +1,11 @@
+{
+  "name": "jira-client",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "Jira Client",
+  "exports": {
+    ".": "./lib/index.js"
+  },
+  "author": "PieterT2000",
+  "license": "MIT"
+}

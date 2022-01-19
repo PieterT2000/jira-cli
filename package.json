@@ -2,11 +2,25 @@
   "name": "node_automation",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "./bin/index.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "NODE_PATH=./lib nodemon ./bin/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "test-script": "jira"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "chalk": "^5.0.0",
+    "commander": "^8.3.0",
+    "dotenv": "^10.0.0",
+    "html-to-text": "^8.1.0",
+    "lowdb": "^3.0.0",
+    "node-fetch": "^3.1.0"
+  },
+  "bin": {
+    "jira": "./bin/index.js"
+  }
 }

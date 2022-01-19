@@ -1,0 +1,16 @@
+{
+  "issues": {
+    "master": {
+      "id": "master",
+      "start": 1642580710303,
+      "end": 1642607040217,
+      "comment": null
+    },
+    "TEST-123": {
+      "id": "TEST-123",
+      "start": 1642607748763,
+      "end": null,
+      "comment": null
+    }
+  }
+}
