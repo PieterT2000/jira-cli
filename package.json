@@ -1,16 +1,16 @@
 {
-  "name": "node_automation",
+  "name": "jira_automation",
   "version": "1.0.0",
-  "description": "",
+  "description": "CLI tool that interacts with the JIRA REST API",
   "main": "./bin/index.js",
   "type": "module",
   "scripts": {
-    "start": "NODE_PATH=./lib nodemon ./bin/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "test-script": "jira"
+    "start": "NODE_PATH=./lib nodemon ./bin/index.js"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "jira"
+  ],
+  "author": "PieterT2000",
   "license": "ISC",
   "dependencies": {
     "chalk": "^5.0.0",

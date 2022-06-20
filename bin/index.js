@@ -113,6 +113,7 @@ program
 program
   .command("find")
   .alias("get")
+  .alias("view")
   .argument("[issueKey]")
   .argument("[fields...]")
   .description("Finds that Jira issue with the key")

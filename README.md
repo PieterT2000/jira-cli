@@ -1,12 +1,19 @@
-### Recipe
+## Jira Automation
 
-1. The user initiates process with `start` command. If matching Jira ticket can be found for branch name, then start the timer process.
-2. Get current time save with jira ticket, branch name to file database.
-3. When the process exits, an other branch is checked out, or the stop command is issued, calculate difference between saved start time and current time. Prompt user for comment and save to Jira ticket.
+---
 
-### Ingredients
+### Commands
 
-- jira api endpoint for timewriting/list of stories
-- axios
-- simple file database
-- commander
+##### Worklogs (i.e. timetracking)
+
+_To start the timer_. If no `ISSUE_KEY`is provided and you're currently in a git branch, the name of that branch will be used as issue key. Otherwise an error will be thrown.
+
+```node
+jira start [ISSUE_KEY]
+```
+
+_To stop the timer and save the worklog._
+
+```node
+jira stop [COMMENT] [ISSUE_KEY]
+```
