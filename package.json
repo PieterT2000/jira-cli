@@ -1,6 +1,6 @@
 {
-  "name": "jira-cli",
-  "version": "1.0.3",
+  "name": "@pietert/jira-cli",
+  "version": "0.0.9",
   "description": "CLI tool that interacts with the JIRA REST API",
   "repository": {
     "type": "git",
