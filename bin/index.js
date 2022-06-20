@@ -111,9 +111,8 @@ program
   });
 
 program
-  .command("find")
-  .alias("get")
-  .alias("view")
+  .command("info")
+  .aliases(["get", "view", "find", "i"])
   .argument("[issueKey]")
   .argument("[fields...]")
   .description("Finds that Jira issue with the key")
@@ -133,8 +132,8 @@ const comment = program.command("comment").alias("cm");
 comment
   .command("add")
   .argument("<issueKey>")
-  .argument("[mention]")
   .argument("<comment>")
+  .argument("[mention]")
   .action(addComment);
 comment.command("list").argument("[maxLen]").action(listComments);
 comment

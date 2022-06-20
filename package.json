@@ -1,13 +1,13 @@
 {
-  "name": "jira_automation",
+  "name": "jira-cli",
   "version": "1.0.3",
   "description": "CLI tool that interacts with the JIRA REST API",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/PieterT2000/jira-automation.git"
+    "url": "git+https://github.com/PieterT2000/jira-cli.git"
   },
   "bugs": {
-    "url": "https://github.com/PieterT2000/jira-automation/issues"
+    "url": "https://github.com/PieterT2000/jira-cli/issues"
   },
   "main": "./bin/index.js",
   "type": "module",
