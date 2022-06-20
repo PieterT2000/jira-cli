@@ -9,7 +9,7 @@
 
 ### Commands
 
-##### Worklogs (i.e. timetracking)
+#### Worklogs (i.e. timetracking)
 
 _To start the timer_. If no `ISSUE_KEY`is provided and you're currently in a git branch, the name of that branch will be used as issue key. Otherwise an error will be thrown. This is what issue keys look like ![](/assets//images//issueKeys.png)
 
@@ -46,7 +46,7 @@ Note that `timeSpent` must be in _seconds_. `startTime` can be in _any time form
 After defining `standup` as a recurring activity, you can run `jira log standup`. Look for more examples in [cli-config.js](./cli-config.js).
 **TIP**: use cron-jobs to automate the logging of recurring events.
 
-##### List issues
+#### List issues
 
 To get a table displaying the current issues in the sprint, run
 
@@ -54,7 +54,7 @@ To get a table displaying the current issues in the sprint, run
 jira issue|is list|ls [STATUS_CATEGORY]
 ```
 
-##### Lookup issue information
+#### Lookup issue information
 
 To view information about a specific Jira issue
 
@@ -62,7 +62,7 @@ To view information about a specific Jira issue
 jira info|i [ISSUE_KEY]
 ```
 
-##### Adding comments
+#### Adding comments
 
 ```node
 jira comment|cm add ISSUE_KEY COMMENT [MENTION]
@@ -71,7 +71,7 @@ jira comment|cm add ISSUE_KEY COMMENT [MENTION]
 You can also include a `mention` (first name of person you want to mention). This will add a mention block at the front of your comment in Jira.
 **Note**: the `COMMENT` argument must be a quoted string.
 
-##### Help
+#### Help
 
 Whenever stuck or when you trying to find info or aliases for a command, run
 
