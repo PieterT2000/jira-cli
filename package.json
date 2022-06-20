@@ -1,6 +1,6 @@
 {
   "name": "jira_automation",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "CLI tool that interacts with the JIRA REST API",
   "main": "./bin/index.js",
   "type": "module",
