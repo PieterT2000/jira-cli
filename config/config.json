@@ -1,0 +1,8 @@
+{
+  "jiraConfig": {
+    "endpoint": "https://cyclomedia.atlassian.net",
+    "username": "pvantuijl@cyclomedia.com",
+    "apiToken": "zjyEgbxyMhrEbrNYUbUO4179",
+    "boardId": "3"
+  }
+}

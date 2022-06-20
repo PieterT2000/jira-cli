@@ -1,8 +1,11 @@
 #!/usr/local/bin/node
-import { config } from "dotenv";
+import { config as dotenv } from "dotenv";
+const __dirname = getDirname(import.meta.url);
+dotenv({ path: path.join(__dirname, "..", ".env") });
+import config from "./../config/config.js";
+
 import { Argument, Command } from "commander/esm.mjs";
-import * as readline from "node:readline";
-import { stdin as input, stdout as output } from "node:process";
+import inquirer from "inquirer";
 import path from "path";
 
 import cliConfig from "../cli-config.js";
@@ -30,26 +33,84 @@ import {
 } from "../lib/actionHandlers/comments.js";
 import { Status } from "../lib/types/types.js";
 
-const __dirname = getDirname(import.meta.url);
-config({ path: path.join(__dirname, "..", ".env") });
+const requiredConfigVars = ["endpoint", "username", "apiToken", "boardId"];
 
-const jiraConfig = {
-  endpoint: process.env.JIRA_END_POINT,
-  username: process.env.JIRA_USERNAME,
-  apikey: process.env.JIRA_API_KEY,
-};
+async function getJiraClient() {
+  const missingConfigVars = [];
+  requiredConfigVars.forEach((configVar) => {
+    if (!config.has(`jiraConfig.${configVar}`)) {
+      missingConfigVars.push(configVar);
+    }
+  });
 
-export const api = new JiraClient(jiraConfig);
+  if (missingConfigVars.length) {
+    await setup(missingConfigVars);
+  }
+  const jiraConfig = config.get("jiraConfig");
+  return new JiraClient(jiraConfig);
+}
 
+async function setup(configVars) {
+  const questions = {
+    endpoint: {
+      type: "input",
+      name: "endpoint",
+      message: "Endpoint: ",
+    },
+    username: {
+      type: "input",
+      name: "username",
+      message: "Username (email): ",
+    },
+    apiToken: { type: "input", name: "apiToken", message: "API key: " },
+    boardId: {
+      type: "input",
+      name: "boardId",
+      message: "Board ID: ",
+      validate: (input) => {
+        if (isNaN(input)) {
+          return "BoardId should be a number";
+        }
+        return true;
+      },
+    },
+  };
+
+  const answers = await inquirer.prompt(
+    Object.values(questions).filter((q) => configVars.includes(q.name))
+  );
+  Object.entries(answers).forEach(([key, val]) => {
+    // ... store in config
+    config.set(`jiraConfig.${key}`, val);
+  });
+  config.save();
+  Output.success("You're successfully set up!");
+}
+
+const argsLen = process.argv.length;
+const isHelpOrSetupCommand =
+  argsLen === 2 ||
+  ["-h", "--help", "setup"].includes(process.argv[argsLen - 1]);
+
+let api = null;
+if (!isHelpOrSetupCommand) {
+  api = await getJiraClient();
+}
+
+const commentsRequired = true;
 const program = new Command();
-
-const commentsRequired = false;
-
 program
-  .command("start")
-  .argument("[issueKey]")
-  .description("Starts the timer")
-  .action(db.saveStartTime);
+  .command("setup")
+  .alias("init")
+  .description("run this first before you use the program")
+  .action(() => {
+    if (!config.isValid("jiraConfig", requiredConfigVars)) {
+      setup(requiredConfigVars);
+    } else {
+      Output.success("Cheers, you're already successfully set up!");
+    }
+  });
+
 program
   .command("log")
   .addArgument(
@@ -95,19 +156,26 @@ program
   });
 
 program
+  .command("start")
+  .argument("[issueKey]")
+  .description("Starts the timer")
+  .action(db.saveStartTime);
+program
   .command("stop")
   .argument("[comment]")
   .argument("[issueKey]")
   .description("Stops the timer")
   .action(async (comment, issueKey = getJiraIssueKey()) => {
     if (!comment && commentsRequired) {
-      const rl = readline.createInterface({ input, output });
-      rl.question("Comment: ", (comment) => {
-        db.saveToApi(issueKey, comment);
-        rl.close();
-      });
+      const questionKey = "comment";
+      inquirer
+        .prompt([{ type: "input", name: questionKey }])
+        .then((answers) => {
+          db.saveToApi(issueKey, answers[questionKey]);
+        });
+    } else {
+      await db.saveToApi(issueKey, comment);
     }
-    await db.saveToApi(issueKey, comment);
   });
 
 program
@@ -167,3 +235,5 @@ issue
   .action(updateIssueStatus);
 
 program.parse(process.argv);
+
+export { api };

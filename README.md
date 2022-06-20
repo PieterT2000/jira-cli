@@ -1,11 +1,38 @@
 ## Jira CLI
 
+- [Setup](#setup)
+  - [Install](#install)
+  - [Configure](#configure)
 - [Commands](#commands)
   - [Worklogs (i.e. timetracking)](#worklogs--ie-timetracking-)
   - [List issues](#list-issues)
   - [Lookup issue information](#lookup-issue-information)
   - [Adding comments](#adding-comments)
   - [Help](#help)
+
+### Setup
+
+#### Install
+
+```bash
+npm i -g @pietert/jira-api
+```
+
+#### Configure
+
+Now run
+
+```node
+jira setup
+```
+
+You will be asked for:
+
+- endpoint: this should be in the form of `https://company_name.atlassian.net`
+- username: your email that you use to login to Jira
+- apiToken: you can create your token [here](https://id.atlassian.com/manage-profile/security/api-tokens).
+- boardId: this is the id of the sprint board. You can find it by going to the backlog or sprint board. The integer after `/boards/` is the _boardId_.
+  ![](/assets/images//boardId.png)
 
 ### Commands
 
