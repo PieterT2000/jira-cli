@@ -1,1 +1,5 @@
+.env
+db.json
+cli-config.js
+node_modules
 assets
