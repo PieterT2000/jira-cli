@@ -2,6 +2,7 @@
   "name": "jira_automation",
   "version": "1.0.1",
   "description": "CLI tool that interacts with the JIRA REST API",
+  "repository": "github:pietert2000:jira-automation",
   "main": "./bin/index.js",
   "type": "module",
   "scripts": {
@@ -11,14 +12,14 @@
     "jira"
   ],
   "author": "PieterT2000",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "chalk": "^5.0.0",
     "commander": "^8.3.0",
     "dotenv": "^10.0.0",
     "html-to-text": "^8.1.0",
     "lowdb": "^3.0.0",
-    "node-fetch": "^3.1.0"
+    "node-fetch": "^3.1.1"
   },
   "bin": {
     "jira": "./bin/index.js"

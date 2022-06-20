@@ -1,7 +1,5 @@
 ## Jira Automation
 
----
-
 ### Commands
 
 ##### Worklogs (i.e. timetracking)
