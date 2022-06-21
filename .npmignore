@@ -1,6 +1,6 @@
 .env
 db.json
 config.json
-cli-config.js
+# cli-config.js
 node_modules
 assets
