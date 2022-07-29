@@ -133,7 +133,7 @@ program
         if (period) [, timeMarker] = timeMarkerRegex.exec(period);
 
         const date = new Date();
-        let periodAdjustedHour = h;
+        let periodAdjustedHour = parseInt(h);
         /**
          * Conventions:
          * - 12 p.m. -> noon
