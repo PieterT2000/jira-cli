@@ -31,6 +31,6 @@
     "node-fetch": "^3.1.1"
   },
   "bin": {
-    "jira": "./bin/index.js"
+    "jira": "node ./bin/index.js"
   }
 }

@@ -1,4 +1,4 @@
-#!/usr/local/bin/node
+#!/usr/bin/env node
 import { config as dotenv } from "dotenv";
 const __dirname = getDirname(import.meta.url);
 dotenv({ path: path.join(__dirname, "..", ".env") });
@@ -13,11 +13,10 @@ import db from "../lib/db.js";
 import JiraClient from "../lib/jira-client/lib/index.js";
 
 import {
-  formatToJiraApiDateString,
   getDirname,
   getJiraIssueKey,
+  formatIssueKeyInput,
 } from "../lib/utils/utils.js";
-import { checkFetchResult } from "../lib/utils/errorHandling.js";
 import Output from "../lib/utils/console-output.js";
 
 import {
@@ -25,7 +24,11 @@ import {
   listIssues,
   updateIssueStatus,
 } from "../lib/actionHandlers/issues.js";
-import { deleteWorkLog, listWorkLogs } from "../lib/actionHandlers/worklogs.js";
+import {
+  addWorkLog,
+  deleteWorkLog,
+  listWorkLogs,
+} from "../lib/actionHandlers/worklogs.js";
 import {
   addComment,
   listComments,
@@ -92,6 +95,10 @@ const isHelpOrSetupCommand =
   argsLen === 2 ||
   ["-h", "--help", "setup"].includes(process.argv[argsLen - 1]);
 
+/**
+ * JiraClient singleton
+ * @type {JiraClient | null}
+ */
 let api = null;
 if (!isHelpOrSetupCommand) {
   api = await getJiraClient();
@@ -110,50 +117,13 @@ program
       Output.success("Cheers, you're already successfully set up!");
     }
   });
-
 program
-  .command("log")
-  .addArgument(
-    new Argument("<type>", "The type of work/activity you want to log").choices(
-      Object.keys(cliConfig)
-    )
-  )
-  .description("Logs work on the activity specified in cli-config.js")
-  .action(async (type) => {
-    if (type in cliConfig) {
-      const { issueKey, comment, timeSpent, startTime } = cliConfig[type];
-      let startTimeDateStr = Date();
-      if (startTime) {
-        const timeRegex =
-          /^(\d{1,2})[:. ]?(\d{0,2})[:. ]?(\d{0,2})[:. ]?([ap]?\.?m\.?)?/gi;
-        const [, h, m, s, period] = timeRegex.exec(startTime);
-
-        const timeMarkerRegex = /^([ap]{1})\.?m?\.?/gi;
-        let timeMarker = null;
-        if (period) [, timeMarker] = timeMarkerRegex.exec(period);
-
-        const date = new Date();
-        let periodAdjustedHour = parseInt(h);
-        /**
-         * Conventions:
-         * - 12 p.m. -> noon
-         * - 12 a.m. -> noon
-         */
-        if (timeMarker === "p" && h < 12) periodAdjustedHour += 12;
-        else if (timeMarker === "a" && h === 12) periodAdjustedHour = 0;
-        date.setHours(periodAdjustedHour, m, s, 0);
-        startTimeDateStr = date.toString();
-      }
-      const jiraDateString = formatToJiraApiDateString(startTimeDateStr);
-      const resolved = checkFetchResult(
-        await api.addWorklog(issueKey, comment, jiraDateString, timeSpent)
-      );
-      if (resolved) {
-        Output.success(`${comment} log added!`);
-      }
-    }
-    process.exit(0);
-  });
+  .command("info")
+  .aliases(["get", "view", "find", "i"])
+  .argument("[issueKey]")
+  .argument("[fields...]")
+  .description("Finds that Jira issue with the key")
+  .action(getIssue);
 
 program
   .command("start")
@@ -165,7 +135,8 @@ program
   .argument("[comment]")
   .argument("[issueKey]")
   .description("Stops the timer")
-  .action(async (comment, issueKey = getJiraIssueKey()) => {
+  .action(async (comment, issueKeyInput = getJiraIssueKey()) => {
+    const issueKey = formatIssueKeyInput(issueKeyInput);
     if (!comment && commentsRequired) {
       const questionKey = "comment";
       inquirer
@@ -179,12 +150,26 @@ program
   });
 
 program
-  .command("info")
-  .aliases(["get", "view", "find", "i"])
-  .argument("[issueKey]")
-  .argument("[fields...]")
-  .description("Finds that Jira issue with the key")
-  .action(getIssue);
+  .command("log")
+  .argument("<type|issueKey>")
+  .argument("[startTime]")
+  .argument("[timeSpent]")
+  .argument("[comment]")
+  .description(
+    "Logs work on the activity specified in cli-config.js or the issueKey in first argument"
+  )
+  .addHelpText(
+    "after",
+    `\nArguments info: \n\n <type|issueKey> - Valid types are: ${Object.keys(
+      cliConfig
+    ).join(", ")}`
+  )
+  .addHelpText(
+    "after",
+    " [startTime] - Valid inputs are 10:00, 10.00, 12 43, 3.00 p.m., 10:45am"
+  )
+  .addHelpText("after", " [timeSpent] - Valid inputs are 2h 15m, 30m, 4h \n")
+  .action(addWorkLog);
 
 const worklog = program.command("worklog").alias("wl");
 worklog
