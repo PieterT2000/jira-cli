@@ -200,6 +200,7 @@ comment
 const issue = program.command("issue").alias("is");
 issue
   .command("list")
+  .alias("ls")
   .addArgument(
     new Argument(
       "[status]",
