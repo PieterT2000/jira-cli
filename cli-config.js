@@ -47,4 +47,10 @@ export default {
     timeSpent: 18000,
     startTime: "12 p.m.",
   },
+  study: {
+    issueKey: "STREET-3154",
+    comment: "Study",
+    timeSpent: 4500,
+    startTime: "4 pm",
+  },
 };
