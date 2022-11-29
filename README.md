@@ -12,7 +12,7 @@
 
 ### Setup
 
-#### Install
+#### Install (Unix & Windows compatible)
 
 ```bash
 npm i -g @pietert/jira-api
