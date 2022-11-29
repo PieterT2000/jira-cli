@@ -1,6 +1,6 @@
 {
   "name": "@pietert/jira-cli",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "CLI tool that interacts with the JIRA REST API",
   "main": "./bin/index.js",
   "bin": {
