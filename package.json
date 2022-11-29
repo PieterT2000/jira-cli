@@ -2,6 +2,10 @@
   "name": "@pietert/jira-cli",
   "version": "0.3.0",
   "description": "CLI tool that interacts with the JIRA REST API",
+  "main": "./bin/index.js",
+  "bin": {
+    "jira": "./bin/index.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/PieterT2000/jira-cli.git"
@@ -9,13 +13,23 @@
   "bugs": {
     "url": "https://github.com/PieterT2000/jira-cli/issues"
   },
-  "main": "./bin/index.js",
   "type": "module",
   "scripts": {
     "start": "NODE_PATH=./lib nodemon ./bin/index.js"
   },
+  "files": [
+    "bin",
+    "lib",
+    "config/config.js",
+    "package.json",
+    "cli-config.js",
+    "README.md"
+  ],
   "keywords": [
-    "jira"
+    "jira",
+    "cli",
+    "jira-automation",
+    "confluence"
   ],
   "author": "PieterT2000",
   "license": "MIT",
@@ -29,8 +43,5 @@
     "lodash.set": "^4.3.2",
     "lowdb": "^3.0.0",
     "node-fetch": "^3.1.1"
-  },
-  "bin": {
-    "jira": "./bin/index.js"
   }
 }
