@@ -110,11 +110,11 @@ program
   .command("setup")
   .alias("init")
   .description("run this first before you use the program")
-  .action(() => {
-    if (!config.isValid("jiraConfig", requiredConfigVars)) {
-      setup(requiredConfigVars);
-    } else {
+  .action(async () => {
+    if (config.isValid("jiraConfig", requiredConfigVars)) {
       Output.success("Cheers, you're already successfully set up!");
+    } else {
+      await setup(requiredConfigVars);
     }
   });
 program

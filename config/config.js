@@ -1,13 +1,7 @@
-import {
-  existsSync,
-  openSync,
-  closeSync,
-  readFileSync,
-  writeFileSync,
-} from "fs";
+import { existsSync, readFileSync, writeFileSync, statSync } from "fs";
+import path, { dirname } from "path";
 import get from "lodash.get";
 import set from "lodash.set";
-import path from "path";
 import { getDirname } from "../lib/utils/utils.js";
 
 const __dirname = getDirname(import.meta.url);
@@ -30,11 +24,11 @@ class Config {
 
   init() {
     // check if file exists, otherwise create
-    if (!existsSync(this.filePath)) {
-      const fd = openSync(this.filePath, "w");
-      writeFileSync(fd, JSON.stringify(defaultConfig));
-      closeSync(fd);
+    if (!(existsSync(this.filePath) && statSync(this.filePath))) {
+      writeFileSync(this.filePath, JSON.stringify(defaultConfig));
       this.data = defaultConfig;
+    } else {
+      this.read();
     }
   }
 
@@ -73,7 +67,7 @@ class Config {
   }
 }
 
-const config = new Config(path.join(__dirname, "config.json"));
+const config = new Config(path.join(__dirname, "/config.json"));
 
 export default config;
 
